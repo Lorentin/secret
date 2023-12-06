@@ -1,0 +1,27 @@
+name: Artifact
+on: push
+jobs:
+  build:
+    runs-on: ubunut-latest
+    outputs:
+      MON_RETOUR: ${{ steps.stepReturns.outputs.result}}
+    steps:
+      - run: echo "Contenu artifact" > my_app.txt
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: file
+          path: my_app.txt
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v2.1.1
+        with:
+          # Artifact name
+          name: file
+      - run: |
+          ls
+          cat my_app.txt
+          
